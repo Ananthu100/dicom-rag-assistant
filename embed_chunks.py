@@ -11,7 +11,7 @@ EMBED_MODEL = os.getenv("EMBED_MODEL", "gemini-embedding-001")
 BATCH = 20  # send 20 chunks per request to stay within free limits
 
 chunks = json.loads(Path("data/chunks.json").read_text(encoding="utf-8"))
-texts = [c["text"] for c in chunks]
+texts = [c.get("embed_text", c["text"]) for c in chunks]
 vectors = []
 
 for i in range(0, len(texts), BATCH):

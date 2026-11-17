@@ -16,9 +16,14 @@ chunks = []
 for path in sorted(Path("data/raw").glob("*.txt")):
     if path.stem.endswith("index"):   # skip table-of-contents pages
         continue
+    label = (path.stem.replace("user__", "")
+                      .replace("service_classes__", "")
+                      .replace("reference__generated__", "")
+                      .replace("_", " "))
     text = path.read_text(encoding="utf-8")
     for i, piece in enumerate(chunk_text(text)):
-        chunks.append({"source": path.stem, "chunk_id": i, "text": piece})
+        chunks.append({"source": path.stem, "chunk_id": i, "text": piece,
+                       "embed_text": f"Topic: {label}. {piece}"})
 
 Path("data/chunks.json").write_text(json.dumps(chunks, indent=2), encoding="utf-8")
 print("Total chunks:", len(chunks))

@@ -26,6 +26,10 @@ for a in soup.find_all("a", href=True):
     if link.startswith(BASE) and link.endswith(".html"):
         if not any(word in link for word in SKIP_WORDS):
             urls.add(link)
+
+EXTRA = ["verification_service_class", "query_retrieve_service_class",
+         "storage_service_class", "basic_worklist_service_class"]
+urls.update(f"{BASE}service_classes/{name}.html" for name in EXTRA)
 urls = sorted(urls)[:MAX_PAGES]
 print(f"Found {len(urls)} pages to download")
 
